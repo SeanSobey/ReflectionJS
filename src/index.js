@@ -66,8 +66,8 @@ module.exports = (function () {
 
         return this._obj[method].toString()
             .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-            .replace(/\s/g, '') // Whitespace
-            .replace(/(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/mg, '') // Comments            
+            .replace(/(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/mg, '') // Comments   
+            .replace(/\s/g, '') // Whitespace         
             .split(',');
     };
     MetaObject.prototype.getMethods = function (includeProtoypye) {

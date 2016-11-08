@@ -1,20 +1,16 @@
 {
     "env": {
-        "browser": true,
-        "commonjs": true,
+        "browser": false,
+        "commonjs": false,
         "es6": true,
         "node": true
     },
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": false
+        }
     },
-    "rules": {
-        "no-const-assign": "warn",
-        "no-this-before-super": "warn",
-        "no-undef": "warn",
-        "no-unreachable": "warn",
-        "no-unused-vars": "warn",
-        "constructor-super": "warn",
-        "valid-typeof": "warn"
-    }
+    "rules": {},
+    "plugins": []
 }

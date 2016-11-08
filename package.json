@@ -2,21 +2,26 @@
   "name": "reflectionjs",
   "version": "1.0.0",
   "description": "Javascript reflection is a library to examine, introspect, and modify javascript code structure and behavior at runtime.",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine"
   },
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/R2dical/ReflectionJS.git"
+  },
   "dependencies": {
+    "@types/jasmine": "^2.5.37"
   },
   "devDependencies": {
-    "eslint": "^3.9.1",
     "babel-eslint": "^7.1.0",
-    "eslint-config-standard": "^6.2.1",
+    "eslint": "^3.9.1",
     "eslint-config-defaults": "^9.0.0",
+    "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.3.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "eslint-plugin-react": "^6.4.1"
+    "eslint-plugin-react": "^6.4.1",
+    "eslint-plugin-standard": "^2.0.1"
   }
 }
