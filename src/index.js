@@ -4,7 +4,7 @@ module.exports = (function () {
 	/**
 	 * Get the type name of an object.
 	 * @param  {Object} obj Object to get the type of.
-	 * @returns {String} The type name, eg .
+	 * @returns {String} The type name, eg 'object', 'number', 'null', 'undefined', 'regexp', 'array', 'string', 'boolean', 'function', 'date' or 'error'.
 	 */
 	function typeOf(obj) {
 
@@ -23,12 +23,11 @@ module.exports = (function () {
 		}
 		this._obj = obj;
 	}
-
 	/**
-	 * Check if an object has a given property.
+	 * Check for a given property.
 	 * @param  {string} property Property name to check.
 	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
-	 * @return {Boolean} Whether or not object has the property.
+	 * @return {Boolean} Whether or not the object has the property.
 	 */
 	MetaObject.prototype.hasProperty = function (property, includeProtoypye) {
 
@@ -37,10 +36,10 @@ module.exports = (function () {
 			this._obj.hasOwnProperty(property) && typeOf(this._obj[property]) !== 'function';
 	};
 	/**
-	 * Check if an this._object has a given method.
+	 * Check for a given method.
 	 * @param  {string} method Method name to check.
-	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct this._object.
-	 * @return {Boolean} Whether or not this._object has the method.
+	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+	 * @return {Boolean} Whether or the not the object has the method.
 	 */
 	MetaObject.prototype.hasMethod = function (method, includeProtoypye) {
 
@@ -49,25 +48,34 @@ module.exports = (function () {
 			this._obj.hasOwnProperty(method) && typeOf(this._obj[method]) === 'function';
 	};
 	/**
-	 * Get an this._object's name.
-	 * @return {string} Object's name
+	 * Get the name.
+	 * @return {string} Object's name.
 	 */
 	MetaObject.prototype.getName = function () {
 
 		return this._obj.constructor.name;
 	};
 	/**
-	 * Get an this._object's constructor.
-	 * @return {function} Object's constructor
+	 * Get the constructor.
+	 * @return {function} Object's constructor.
 	 */
 	MetaObject.prototype.getConstructor = function () {
 
 		return this._obj.constructor;
 	};
+	/**
+	 * Get the constructors parameters.
+	 * @return {Array} Object constructor's parameter names.
+	 */
 	MetaObject.prototype.getConstructorParameters = function () {
 
 		return this.getMethodParameters('constructor');
 	};
+	/**
+	 * Get a methods parameters.
+	 * @param  {string} method Method name.
+	 * @return {Array} Object method's parameter names.
+	 */
 	MetaObject.prototype.getMethodParameters = function (method) {
 
 		if (!this.hasMethod(method, true)) {
@@ -76,11 +84,16 @@ module.exports = (function () {
 		}
 
 		return this._obj[method].toString()
-			.match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-			.replace(/(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/mg, '') // Comments
+			.match(/^function\s*[^(]*\(\s*([^)]*)\)/m)[1]
+			.replace(/(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,)]*))/mg, '') // Comments
 			.replace(/\s/g, '') // Whitespace
 			.split(',');
 	};
+	/**
+	 * Get all the methods.
+	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+	 * @return {Array} Object method's names.
+	 */
 	MetaObject.prototype.getMethods = function (includeProtoypye) {
 
 		var methods = [];
@@ -93,6 +106,12 @@ module.exports = (function () {
 		}
 		return methods;
 	};
+	/**
+	 * Get a specific method.
+	 * @param  {string} method Method name.
+	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+	 * @return {Function} The method.
+	 */
 	MetaObject.prototype.getMethod = function (method, includeProtoypye) {
 
 		if (!this.hasMethod(method, includeProtoypye)) {
@@ -102,6 +121,11 @@ module.exports = (function () {
 
 		return this._obj[method];
 	};
+	/**
+	 * Get all the properties.
+	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+	 * @return {Array} Object properties's names.
+	 */
 	MetaObject.prototype.getProperties = function (includeProtoypye) {
 
 		var properties = [];
@@ -114,6 +138,12 @@ module.exports = (function () {
 		}
 		return properties;
 	};
+	/**
+	 * Get a specific property.
+	 * @param  {string} property Property's name.
+	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+	 * @return {Any} The property.
+	 */
 	MetaObject.prototype.getProperty = function (property, includeProtoypye) {
 
 		if (!this.hasProperty(property, includeProtoypye)) {
