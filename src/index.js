@@ -2,17 +2,28 @@ module.exports = (function () {
 	'use-strict';
 
 	/**
+	 * Get the type name of an object.
+	 * @param  {Object} obj Object to get the type of.
+	 * @returns {String} The type name, eg .
+	 */
+	function typeOf(obj) {
+
+		return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+	}
+
+	/**
 	 * Create a new meta-object to inspect another object.
 	 * @param  {Object|Function} obj Object or function to inspect.
 	 */
 	function MetaObject(obj) {
 
-		if (obj === null || typeof obj !== 'object') {
+		if (obj === null || typeOf(obj) !== 'object') {
 
 			throw new MetaObjectNotObjectError();
 		}
 		this._obj = obj;
 	}
+
 	/**
 	 * Check if an object has a given property.
 	 * @param  {string} property Property name to check.
@@ -22,8 +33,8 @@ module.exports = (function () {
 	MetaObject.prototype.hasProperty = function (property, includeProtoypye) {
 
 		return includeProtoypye === undefined || includeProtoypye === true ?
-			property in this._obj && typeof this._obj[property] !== 'function' :
-			this._obj.hasOwnProperty(property) && typeof this._obj[property] !== 'function';
+			property in this._obj && typeOf(this._obj[property]) !== 'function' :
+			this._obj.hasOwnProperty(property) && typeOf(this._obj[property]) !== 'function';
 	};
 	/**
 	 * Check if an this._object has a given method.
@@ -34,8 +45,8 @@ module.exports = (function () {
 	MetaObject.prototype.hasMethod = function (method, includeProtoypye) {
 
 		return includeProtoypye === undefined || includeProtoypye === true ?
-			method in this._obj && typeof this._obj[method] === 'function' :
-			this._obj.hasOwnProperty(method) && typeof this._obj[method] === 'function';
+			method in this._obj && typeOf(this._obj[method]) === 'function' :
+			this._obj.hasOwnProperty(method) && typeOf(this._obj[method]) === 'function';
 	};
 	/**
 	 * Get an this._object's name.
@@ -113,10 +124,7 @@ module.exports = (function () {
 		return this._obj[property];
 	};
 
-	function MetaObjectError() {
-
-		throw new Error('This is an abstract type');
-	}
+	const MetaObjectError = {};
 	MetaObjectError.prototype = Object.create(Error.prototype);
 	MetaObjectError.prototype.name = 'MetaObjectError';
 	MetaObjectError.prototype.message = '';
@@ -140,5 +148,12 @@ module.exports = (function () {
 	MetaObjectPropertyNotExistError.prototype.message = 'The property does not exist on the object or function.';
 	MetaObjectPropertyNotExistError.prototype.constructor = MetaObjectPropertyNotExistError;
 
-	return MetaObject;
+	return {
+		typeOf: typeOf,
+		MetaObject: MetaObject,
+		MetaObjectError: MetaObjectError,
+		MetaObjectNotObjectError: MetaObjectNotObjectError,
+		MetaObjectMethodNotExistError: MetaObjectMethodNotExistError,
+		MetaObjectPropertyNotExistError: MetaObjectPropertyNotExistError
+	};
 })();

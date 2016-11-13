@@ -2,23 +2,23 @@ const MetaObject = require('../src/index.js');
 
 function MyObject(param) {
 
-    this.hello = 'Hello World !';
+	this.hello = 'Hello World !';
 
-    this.sub = {
-        sayHello: function () {
-            return 'Hi People !';
-        }
-    };
+	this.sub = {
+		sayHello: function () {
+			return 'Hi People !';
+		}
+	};
 }
 
 MyObject.prototype.test = 'test';
 
-MyObject.prototype.sayHello = function ( /* A comment */ param1, /* Another comment */ param2 /* A post comment */ ,
-    // a line comment
-    param3,
-    param4) {
+MyObject.prototype.sayHello = function (/* A comment */ param1, /* Another comment */ param2 /* A post comment */,
+	// a line comment
+	param3,
+	param4) {
 
-    return this.hello;
+	return this.hello;
 };
 
 const myObject = new MyObject();
@@ -40,6 +40,6 @@ function test(param1) {
 
 function test2() {
 
-    console.log(test2.caller.toString());
+	console.log(test2.caller.toString());
 }
 test2();
