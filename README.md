@@ -5,7 +5,7 @@ Javascript reflection is a library to examine, introspect, and modify javascript
 ## Installation
 
 ```
-npm install reflectionjs
+npm install js-reflection
 ```
 
 ## Usage
