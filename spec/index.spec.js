@@ -1,135 +1,135 @@
 const MetaObject = require('../src/index.js');
 
-describe("MetaObject", function () {
+describe('MetaObject', function () {
 
-  function TestObject(param) {
+	function TestObject(param) {
 
-    this.hello = 'Hello World !';
+		this.hello = 'Hello World !';
 
-    this.sub = {
-      sayHello: function () {
-        return 'Hi People !';
-      }
-    };
-  }
+		this.sub = {
+			sayHello: function () {
+				return 'Hi People !';
+			}
+		};
+	}
 
-  TestObject.prototype.test = 'test';
+	TestObject.prototype.test = 'test';
 
-  TestObject.prototype.sayHello = function ( /* A comment */ param1, /* Another comment */ param2 /* A post comment */,
-    // a line comment
-    param3,
-    param4) {
+	TestObject.prototype.sayHello = function (/* A comment */ param1, /* Another comment */ param2 /* A post comment */,
+		// a line comment
+		param3,
+		param4) {
 
-    return this.hello;
-  };
+		return this.hello;
+	};
 
-  describe("hasProperty", function () {
+	describe('hasProperty', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.hasProperty('hello')).toBe(true);
-    });
-  });
+			expect(metaObject.hasProperty('hello')).toBe(true);
+		});
+	});
 
-  describe("hasMethod", function () {
+	describe('hasMethod', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.hasMethod('sayHello')).toBe(true);
-    });
-  });
+			expect(metaObject.hasMethod('sayHello')).toBe(true);
+		});
+	});
 
-  describe("getName", function () {
+	describe('getName', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.getName()).toBe('TestObject');
-    });
-  });
+			expect(metaObject.getName()).toBe('TestObject');
+		});
+	});
 
-  describe("getConstructor", function () {
+	describe('getConstructor', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.getConstructor('hello')).toEqual(jasmine.any(Function));
-    });
-  });
+			expect(metaObject.getConstructor('hello')).toEqual(jasmine.any(Function));
+		});
+	});
 
-  describe("getConstructorParameters", function () {
+	describe('getConstructorParameters', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.getConstructorParameters()).toEqual(['param']);
-    });
-  });
+			expect(metaObject.getConstructorParameters()).toEqual(['param']);
+		});
+	});
 
-  describe("getMethodParameters", function () {
+	describe('getMethodParameters', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.getMethodParameters('sayHello')).toEqual(['param1', 'param2', 'param3', 'param4']);
-    });
-  });
+			expect(metaObject.getMethodParameters('sayHello')).toEqual(['param1', 'param2', 'param3', 'param4']);
+		});
+	});
 
-  describe("getMethods", function () {
+	describe('getMethods', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.getMethods()).toEqual(['sayHello']);
-    });
-  });
+			expect(metaObject.getMethods()).toEqual(['sayHello']);
+		});
+	});
 
-  describe("getMethod", function () {
+	describe('getMethod', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.getMethod('sayHello')).toEqual(jasmine.any(Function));
-    });
-  });
+			expect(metaObject.getMethod('sayHello')).toEqual(jasmine.any(Function));
+		});
+	});
 
-  describe("getProperties", function () {
+	describe('getProperties', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.getProperties()).toEqual([ 'hello', 'sub', 'test' ]);
-    });
-  });
+			expect(metaObject.getProperties()).toEqual(['hello', 'sub', 'test']);
+		});
+	});
 
-  describe("getProperty", function () {
+	describe('getProperty', function () {
 
-    it("to work", function () {
+		it('to work', function () {
 
-      const testObject = new TestObject();
-      const metaObject = new MetaObject(testObject);
+			const testObject = new TestObject();
+			const metaObject = new MetaObject(testObject);
 
-      expect(metaObject.getProperty('hello')).toEqual(jasmine.any(String));
-    });
-  });
+			expect(metaObject.getProperty('hello')).toEqual(jasmine.any(String));
+		});
+	});
 });
