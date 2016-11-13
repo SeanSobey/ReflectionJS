@@ -1,189 +1,260 @@
-module.exports = (function () {
-	'use-strict';
+/**
+ * Javascript reflection is a library to examine, introspect, and modify javascript code structure and behavior at runtime.
+ * @module reflection
+ */
 
-	/**
-	 * Get the type name of an object.
-	 * @param  {Object} obj Object to get the type of.
-	 * @returns {String} The type name, eg 'object', 'number', 'null', 'undefined', 'regexp', 'array', 'string', 'boolean', 'function', 'date' or 'error'.
-	 */
-	function typeOf(obj) {
+'use-strict';
 
-		return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+/**
+ * Get the type name of an object.
+ * @param  {Object} obj Object to get the type of.
+ * @returns {String} The type name, eg 'object', 'number', 'null', 'undefined', 'regexp', 'array', 'string', 'boolean', 'function', 'date' or 'error'.
+ * @static
+ */
+function typeOf(obj) {
+
+	return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+}
+
+const ReflectionError = {};
+ReflectionError.prototype = Object.create(Error.prototype);
+ReflectionError.prototype.name = 'ReflectionError';
+ReflectionError.prototype.message = '';
+ReflectionError.prototype.constructor = null;
+
+/**
+ * Create a new meta-object to inspect another object.
+ * @param  {Object|Function} obj Object or function to inspect.
+ * @static
+ */
+function Obj(obj) {
+
+	if (obj === null || typeOf(obj) !== 'object') {
+
+		throw new ObjNotObjectError();
+	}
+	this._obj = obj;
+}
+/**
+ * Check for a given property.
+ * @param  {string} property Property name to check.
+ * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+ * @return {Boolean} Whether or not the object has the property.
+ */
+Obj.prototype.hasProperty = function (property, includeProtoypye) {
+
+	return includeProtoypye === undefined || includeProtoypye === true ?
+		property in this._obj && typeOf(this._obj[property]) !== 'function' :
+		this._obj.hasOwnProperty(property) && typeOf(this._obj[property]) !== 'function';
+};
+/**
+ * Check for a given method.
+ * @param  {string} method Method name to check.
+ * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+ * @return {Boolean} Whether or the not the object has the method.
+ */
+Obj.prototype.hasMethod = function (method, includeProtoypye) {
+
+	return includeProtoypye === undefined || includeProtoypye === true ?
+		method in this._obj && typeOf(this._obj[method]) === 'function' :
+		this._obj.hasOwnProperty(method) && typeOf(this._obj[method]) === 'function';
+};
+/**
+ * Get the name.
+ * @return {string} Object's name.
+ */
+Obj.prototype.getName = function () {
+
+	return this._obj.constructor.name;
+};
+/**
+ * Get the constructor.
+ * @return {function} Object's constructor.
+ */
+Obj.prototype.getConstructor = function () {
+
+	return this._obj.constructor;
+};
+/**
+ * Get the constructors parameters.
+ * @return {Array} Object constructor's parameter names.
+ */
+Obj.prototype.getConstructorParameters = function () {
+
+	return this.getMethodParameters('constructor');
+};
+/**
+ * Get a methods parameters.
+ * @param  {string} method Method name.
+ * @return {Array} Object method's parameter names.
+ */
+Obj.prototype.getMethodParameters = function (method) {
+
+	if (!this.hasMethod(method, true)) {
+
+		throw new ObjMethodNotExistError();
 	}
 
-	/**
-	 * Create a new meta-object to inspect another object.
-	 * @param  {Object|Function} obj Object or function to inspect.
-	 */
-	function MetaObject(obj) {
+	return getFunctionParameters(this._obj[method].toString());
+};
+/**
+ * Get all the methods.
+ * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+ * @return {Array} Object method's names.
+ */
+Obj.prototype.getMethods = function (includeProtoypye) {
 
-		if (obj === null || typeOf(obj) !== 'object') {
+	var methods = [];
+	for (const method in this._obj) {
 
-			throw new MetaObjectNotObjectError();
+		if (this.hasMethod(method, includeProtoypye)) {
+
+			methods.push(method);
 		}
-		this._obj = obj;
 	}
-	/**
-	 * Check for a given property.
-	 * @param  {string} property Property name to check.
-	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
-	 * @return {Boolean} Whether or not the object has the property.
-	 */
-	MetaObject.prototype.hasProperty = function (property, includeProtoypye) {
+	return methods;
+};
+/**
+ * Get a specific method.
+ * @param  {string} method Method name.
+ * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+ * @return {Function} The method.
+ */
+Obj.prototype.getMethod = function (method, includeProtoypye) {
 
-		return includeProtoypye === undefined || includeProtoypye === true ?
-			property in this._obj && typeOf(this._obj[property]) !== 'function' :
-			this._obj.hasOwnProperty(property) && typeOf(this._obj[property]) !== 'function';
-	};
-	/**
-	 * Check for a given method.
-	 * @param  {string} method Method name to check.
-	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
-	 * @return {Boolean} Whether or the not the object has the method.
-	 */
-	MetaObject.prototype.hasMethod = function (method, includeProtoypye) {
+	if (!this.hasMethod(method, includeProtoypye)) {
 
-		return includeProtoypye === undefined || includeProtoypye === true ?
-			method in this._obj && typeOf(this._obj[method]) === 'function' :
-			this._obj.hasOwnProperty(method) && typeOf(this._obj[method]) === 'function';
-	};
-	/**
-	 * Get the name.
-	 * @return {string} Object's name.
-	 */
-	MetaObject.prototype.getName = function () {
+		throw new ObjMethodNotExistError();
+	}
 
-		return this._obj.constructor.name;
-	};
-	/**
-	 * Get the constructor.
-	 * @return {function} Object's constructor.
-	 */
-	MetaObject.prototype.getConstructor = function () {
+	return this._obj[method];
+};
+/**
+ * Get all the properties.
+ * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+ * @return {Array} Object properties's names.
+ */
+Obj.prototype.getProperties = function (includeProtoypye) {
 
-		return this._obj.constructor;
-	};
-	/**
-	 * Get the constructors parameters.
-	 * @return {Array} Object constructor's parameter names.
-	 */
-	MetaObject.prototype.getConstructorParameters = function () {
+	var properties = [];
+	for (const prop in this._obj) {
 
-		return this.getMethodParameters('constructor');
-	};
-	/**
-	 * Get a methods parameters.
-	 * @param  {string} method Method name.
-	 * @return {Array} Object method's parameter names.
-	 */
-	MetaObject.prototype.getMethodParameters = function (method) {
+		if (this.hasProperty(prop, includeProtoypye)) {
 
-		if (!this.hasMethod(method, true)) {
-
-			throw new MetaObjectMethodNotExistError();
+			properties.push(prop);
 		}
+	}
+	return properties;
+};
+/**
+ * Get a specific property.
+ * @param  {string} property Property's name.
+ * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
+ * @return {Any} The property.
+ */
+Obj.prototype.getProperty = function (property, includeProtoypye) {
 
-		return this._obj[method].toString()
-			.match(/^function\s*[^(]*\(\s*([^)]*)\)/m)[1]
-			.replace(/(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,)]*))/mg, '') // Comments
-			.replace(/\s/g, '') // Whitespace
-			.split(',');
-	};
-	/**
-	 * Get all the methods.
-	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
-	 * @return {Array} Object method's names.
-	 */
-	MetaObject.prototype.getMethods = function (includeProtoypye) {
+	if (!this.hasProperty(property, includeProtoypye)) {
 
-		var methods = [];
-		for (const method in this._obj) {
+		throw new ObjPropertyNotExistError();
+	}
 
-			if (this.hasMethod(method, includeProtoypye)) {
+	return this._obj[property];
+};
 
-				methods.push(method);
-			}
-		}
-		return methods;
-	};
-	/**
-	 * Get a specific method.
-	 * @param  {string} method Method name.
-	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
-	 * @return {Function} The method.
-	 */
-	MetaObject.prototype.getMethod = function (method, includeProtoypye) {
+const ObjError = {};
+ObjError.prototype = Object.create(ReflectionError.prototype);
+ObjError.prototype.name = 'ObjError';
+ObjError.prototype.message = '';
+ObjError.prototype.constructor = null;
 
-		if (!this.hasMethod(method, includeProtoypye)) {
+function ObjNotObjectError() {}
+ObjNotObjectError.prototype = Object.create(ObjError.prototype);
+ObjNotObjectError.prototype.name = 'ReflectionNotObjectError';
+ObjNotObjectError.prototype.message = 'Expected an object or function.';
+ObjNotObjectError.prototype.constructor = ObjNotObjectError;
 
-			throw new MetaObjectMethodNotExistError();
-		}
+function ObjMethodNotExistError() {}
+ObjMethodNotExistError.prototype = Object.create(ObjError.prototype);
+ObjMethodNotExistError.prototype.name = 'ObjMethodNotExistError';
+ObjMethodNotExistError.prototype.message = 'The method does not exist on the object or function.';
+ObjMethodNotExistError.prototype.constructor = ObjMethodNotExistError;
 
-		return this._obj[method];
-	};
-	/**
-	 * Get all the properties.
-	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
-	 * @return {Array} Object properties's names.
-	 */
-	MetaObject.prototype.getProperties = function (includeProtoypye) {
+function ObjPropertyNotExistError() {}
+ObjPropertyNotExistError.prototype = Object.create(ObjError.prototype);
+ObjPropertyNotExistError.prototype.name = 'ObjPropertyNotExistError';
+ObjPropertyNotExistError.prototype.message = 'The property does not exist on the object or function.';
+ObjPropertyNotExistError.prototype.constructor = ObjPropertyNotExistError;
 
-		var properties = [];
-		for (const prop in this._obj) {
+/**
+ * Create a new meta-funct to inspect another object.
+ * @param  {Function} func Function to inspect.
+ * @static
+ */
+function Func(func) {
 
-			if (this.hasProperty(prop, includeProtoypye)) {
+	if (typeOf(func) !== 'function') {
 
-				properties.push(prop);
-			}
-		}
-		return properties;
-	};
-	/**
-	 * Get a specific property.
-	 * @param  {string} property Property's name.
-	 * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
-	 * @return {Any} The property.
-	 */
-	MetaObject.prototype.getProperty = function (property, includeProtoypye) {
+		throw new FuncNotFunctionError();
+	}
+	this._func = func;
+}
+/**
+ * Get the name.
+ * @return {string} Functions's name.
+ */
+Func.prototype.getName = function () {
 
-		if (!this.hasProperty(property, includeProtoypye)) {
+	return this._func.name;
+};
+/**
+ * Get the parameters.
+ * @return {Array} Functions's parameter names.
+ */
+Func.prototype.getParameters = function () {
 
-			throw new MetaObjectPropertyNotExistError();
-		}
+	return getFunctionParameters(this._func.toString());
+};
 
-		return this._obj[property];
-	};
+const FuncError = {};
+FuncError.prototype = Object.create(ReflectionError.prototype);
+FuncError.prototype.name = 'FuncError';
+FuncError.prototype.message = '';
+FuncError.prototype.constructor = null;
 
-	const MetaObjectError = {};
-	MetaObjectError.prototype = Object.create(Error.prototype);
-	MetaObjectError.prototype.name = 'MetaObjectError';
-	MetaObjectError.prototype.message = '';
-	MetaObjectError.prototype.constructor = null;
+function FuncNotFunctionError() {}
+FuncNotFunctionError.prototype = Object.create(FuncError.prototype);
+FuncNotFunctionError.prototype.name = 'FuncNotFunctionError';
+FuncNotFunctionError.prototype.message = 'Expected a function.';
+FuncNotFunctionError.prototype.constructor = FuncNotFunctionError;
 
-	function MetaObjectNotObjectError() {}
-	MetaObjectNotObjectError.prototype = Object.create(MetaObjectError.prototype);
-	MetaObjectNotObjectError.prototype.name = 'ReflectionNotObjectError';
-	MetaObjectNotObjectError.prototype.message = 'Expected an object or function.';
-	MetaObjectNotObjectError.prototype.constructor = MetaObjectNotObjectError;
+/**
+ * Get the parameters.
+ * @param  {String} functionSource Function source code.
+ * @return {Array} Functions's parameter names.
+ */
+function getFunctionParameters(functionSource) {
 
-	function MetaObjectMethodNotExistError() {}
-	MetaObjectMethodNotExistError.prototype = Object.create(MetaObjectError.prototype);
-	MetaObjectMethodNotExistError.prototype.name = 'MetaObjectMethodNotExistError';
-	MetaObjectMethodNotExistError.prototype.message = 'The method does not exist on the object or function.';
-	MetaObjectMethodNotExistError.prototype.constructor = MetaObjectMethodNotExistError;
+	const functionRegex = /^function\s*[^(]*\(\s*([^)]*?)\s*\)/m;
+	const lambdaRegex = /^\s*\(?\s*([a-zA-Z0-9,]*?)\s*\)?\s*=>/m;
+	const commentsRegex = /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,)]*))/mg;
+	const whitespaceRegex = /\s/g;
+	const parameterDelimiter = ',';
 
-	function MetaObjectPropertyNotExistError() {}
-	MetaObjectPropertyNotExistError.prototype = Object.create(MetaObjectError.prototype);
-	MetaObjectPropertyNotExistError.prototype.name = 'MetaObjectPropertyNotExistError';
-	MetaObjectPropertyNotExistError.prototype.message = 'The property does not exist on the object or function.';
-	MetaObjectPropertyNotExistError.prototype.constructor = MetaObjectPropertyNotExistError;
+	const match = functionSource.match(functionRegex) || functionSource.match(lambdaRegex);
+	return match[1].length > 0 ?
+		match[1].replace(commentsRegex, '').replace(whitespaceRegex, '').split(parameterDelimiter) :
+		[];
+}
 
-	return {
-		typeOf: typeOf,
-		MetaObject: MetaObject,
-		MetaObjectError: MetaObjectError,
-		MetaObjectNotObjectError: MetaObjectNotObjectError,
-		MetaObjectMethodNotExistError: MetaObjectMethodNotExistError,
-		MetaObjectPropertyNotExistError: MetaObjectPropertyNotExistError
-	};
-})();
+module.exports = {
+	typeOf: typeOf,
+	Obj: Obj,
+	ObjError: ObjError,
+	ObjNotObjectError: ObjNotObjectError,
+	ObjMethodNotExistError: ObjMethodNotExistError,
+	ObjPropertyNotExistError: ObjPropertyNotExistError,
+	Func: Func,
+	FuncError: FuncError,
+	FuncNotFunctionError: FuncNotFunctionError
+};
