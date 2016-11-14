@@ -1,6 +1,6 @@
 {
   "name": "js-reflection",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Javascript reflection is a library to examine, introspect, and modify javascript code structure and behavior at runtime.",
   "main": "index.js",
   "scripts": {
@@ -13,10 +13,8 @@
     "type": "git",
     "url": "https://github.com/R2dical/ReflectionJS.git"
   },
-  "dependencies": {
-    "@types/jasmine": "^2.5.37"
-  },
   "devDependencies": {
+    "@types/jasmine": "^2.5.37",
     "babel-eslint": "^7.1.0",
     "eslint": "^3.9.1",
     "eslint-config-defaults": "^9.0.0",

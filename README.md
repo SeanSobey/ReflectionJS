@@ -267,3 +267,8 @@ Get the parameters.
 | --- | --- | --- |
 | functionSource | <code>String</code> | Function source code. |
 
+## Run Tests
+
+```
+npm run test
+```
