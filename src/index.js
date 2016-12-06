@@ -297,6 +297,9 @@ ObjPropertyNotExistError.prototype.constructor = ObjPropertyNotExistError;
  * @example
  * const reflection = require('js-reflection');
  * 
+ * function testFunc() { };
+ * 
+ * const reflectionFunc = new reflection.Func(testFunc);
  */
 function Func(func) {
 
@@ -312,6 +315,10 @@ function Func(func) {
  * @example
  * const reflection = require('js-reflection');
  * 
+ * function testFunc() { };
+ * 
+ * const reflectionFunc = new reflection.Func(testFunc);
+ * reflectionFunc.getName();	//'testFunc'
  */
 Func.prototype.getName = function () {
 
@@ -323,9 +330,13 @@ Func.prototype.getName = function () {
  * @example
  * const reflection = require('js-reflection');
  * 
+ * function testFunc(text) { };
+ * 
+ * const reflectionFunc = new reflection.Func(testFunc);
+ * reflectionFunc.getParameters();	//['text']
  */
 Func.prototype.getParameters = function () {
-
+	
 	return getFunctionParameters(this._func.toString());
 };
 
@@ -345,6 +356,7 @@ FuncNotFunctionError.prototype.constructor = FuncNotFunctionError;
  * Get the parameters.
  * @param  {String} functionSource Function source code.
  * @return {Array} Functions's parameter names.
+ * @ignore
  */
 function getFunctionParameters(functionSource) {
 
