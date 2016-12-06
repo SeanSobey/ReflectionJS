@@ -11,7 +11,7 @@ npm install js-reflection
 ## Usage
 
 ```JavaScript
-const reflection = require('../src/index.js');
+const reflection = require('js-reflection');
 
 function MyObject(param) {
 
