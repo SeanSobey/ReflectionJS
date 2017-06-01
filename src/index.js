@@ -39,7 +39,7 @@ function Obj(obj) {
  * Check for a given property.
  * @param  {string} property Property name to check.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @return {Boolean} Whether or not the object has the property.
+ * @returns {Boolean} Whether or not the object has the property.
  */
 Obj.prototype.hasProperty = function (property, includeProtoypye) {
 
@@ -51,7 +51,7 @@ Obj.prototype.hasProperty = function (property, includeProtoypye) {
  * Check for a given method.
  * @param  {string} method Method name to check.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @return {Boolean} Whether or the not the object has the method.
+ * @returns {Boolean} Whether or the not the object has the method.
  */
 Obj.prototype.hasMethod = function (method, includeProtoypye) {
 
@@ -61,7 +61,7 @@ Obj.prototype.hasMethod = function (method, includeProtoypye) {
 };
 /**
  * Get the name.
- * @return {string} Object's name.
+ * @returns {string} Object's name.
  */
 Obj.prototype.getName = function () {
 
@@ -69,7 +69,7 @@ Obj.prototype.getName = function () {
 };
 /**
  * Get the constructor.
- * @return {function} Object's constructor.
+ * @returns {function} Object's constructor.
  */
 Obj.prototype.getConstructor = function () {
 
@@ -77,7 +77,7 @@ Obj.prototype.getConstructor = function () {
 };
 /**
  * Get the constructors parameters.
- * @return {Array} Object constructor's parameter names.
+ * @returns {Array} Object constructor's parameter names.
  */
 Obj.prototype.getConstructorParameters = function () {
 
@@ -86,7 +86,7 @@ Obj.prototype.getConstructorParameters = function () {
 /**
  * Get a methods parameters.
  * @param  {string} method Method name.
- * @return {Array} Object method's parameter names.
+ * @returns {Array} Object method's parameter names.
  */
 Obj.prototype.getMethodParameters = function (method) {
 
@@ -100,7 +100,7 @@ Obj.prototype.getMethodParameters = function (method) {
 /**
  * Get all the methods.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @return {Array} Object method's names.
+ * @returns {Array} Object method's names.
  */
 Obj.prototype.getMethods = function (includeProtoypye) {
 
@@ -118,7 +118,7 @@ Obj.prototype.getMethods = function (includeProtoypye) {
  * Get a specific method.
  * @param  {string} method Method name.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @return {Function} The method.
+ * @returns {Function} The method.
  */
 Obj.prototype.getMethod = function (method, includeProtoypye) {
 
@@ -132,7 +132,7 @@ Obj.prototype.getMethod = function (method, includeProtoypye) {
 /**
  * Get all the properties.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @return {Array} Object properties's names.
+ * @returns {Array} Object properties's names.
  */
 Obj.prototype.getProperties = function (includeProtoypye) {
 
@@ -150,7 +150,7 @@ Obj.prototype.getProperties = function (includeProtoypye) {
  * Get a specific property.
  * @param  {string} property Property's name.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @return {Any} The property.
+ * @returns {Any} The property.
  */
 Obj.prototype.getProperty = function (property, includeProtoypye) {
 
@@ -201,7 +201,7 @@ function Func(func) {
 }
 /**
  * Get the name.
- * @return {string} Functions's name.
+ * @returns {string} Functions's name.
  */
 Func.prototype.getName = function () {
 
@@ -209,7 +209,7 @@ Func.prototype.getName = function () {
 };
 /**
  * Get the parameters.
- * @return {Array} Functions's parameter names.
+ * @returns {Array} Functions's parameter names.
  */
 Func.prototype.getParameters = function () {
 
@@ -231,7 +231,7 @@ FuncNotFunctionError.prototype.constructor = FuncNotFunctionError;
 /**
  * Get the parameters.
  * @param  {String} functionSource Function source code.
- * @return {Array} Functions's parameter names.
+ * @returns {Array} Functions's parameter names.
  */
 function getFunctionParameters(functionSource) {
 
