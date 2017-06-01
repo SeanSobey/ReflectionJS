@@ -10,6 +10,19 @@
  * @param  {Object} obj Object to get the type of.
  * @returns {String} The type name, eg 'object', 'number', 'null', 'undefined', 'regexp', 'array', 'string', 'boolean', 'function', 'date' or 'error'.
  * @static
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * reflection.typeOf(null);				//'null'
+ * reflection.typeOf(undefined);		//'undefined'
+ * reflection.typeOf(/\s/g);			//'regexp'
+ * reflection.typeOf(true);				//'boolean'
+ * reflection.typeOf([]);				//'array'
+ * reflection.typeOf(1);				//'number'
+ * reflection.typeOf('hello');			//'string'
+ * reflection.typeOf(new Date());		//'date'
+ * reflection.typeOf(new Error());		//'error'
+ * reflection.typeOf(function() {});	//'function'
  */
 function typeOf(obj) {
 
@@ -26,6 +39,13 @@ ReflectionError.prototype.constructor = null;
  * Create a new meta-object to inspect another object.
  * @param  {Object|Function} obj Object or function to inspect.
  * @static
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
  */
 function Obj(obj) {
 
@@ -38,8 +58,18 @@ function Obj(obj) {
 /**
  * Check for a given property.
  * @param  {string} property Property name to check.
- * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @returns {Boolean} Whether or not the object has the property.
+ * @param  {Boolean} includeProtoypye True (default) to look up the prototype chain as well, false to only look at direct object.
+ * @return s{Boolean} Whether or not the object has the property.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
+ * reflectionObj.hasProperty('hello');			//true
+ * reflectionObj.hasProperty('hello', false);	//false
+ * reflectionObj.hasProperty('sayHello');		//false
  */
 Obj.prototype.hasProperty = function (property, includeProtoypye) {
 
@@ -51,7 +81,16 @@ Obj.prototype.hasProperty = function (property, includeProtoypye) {
  * Check for a given method.
  * @param  {string} method Method name to check.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @returns {Boolean} Whether or the not the object has the method.
+ * @return s{Boolean} Whether or the not the object has the method.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
+ * reflectionObj.hasProperty('sayHello');	//true
+ * reflectionObj.hasProperty('hello');		//false
  */
 Obj.prototype.hasMethod = function (method, includeProtoypye) {
 
@@ -61,7 +100,15 @@ Obj.prototype.hasMethod = function (method, includeProtoypye) {
 };
 /**
  * Get the name.
- * @returns {string} Object's name.
+ * @return s{string} Object's name.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
+ * reflectionObj.getName();	//'testObj'
  */
 Obj.prototype.getName = function () {
 
@@ -69,7 +116,14 @@ Obj.prototype.getName = function () {
 };
 /**
  * Get the constructor.
- * @returns {function} Object's constructor.
+ * @return s{function} Object's constructor.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
  */
 Obj.prototype.getConstructor = function () {
 
@@ -77,7 +131,15 @@ Obj.prototype.getConstructor = function () {
 };
 /**
  * Get the constructors parameters.
- * @returns {Array} Object constructor's parameter names.
+ * @return s{Array} Object constructor's parameter names.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
+ * reflectionObj.getConstructor();	// [function]
  */
 Obj.prototype.getConstructorParameters = function () {
 
@@ -86,7 +148,15 @@ Obj.prototype.getConstructorParameters = function () {
 /**
  * Get a methods parameters.
  * @param  {string} method Method name.
- * @returns {Array} Object method's parameter names.
+ * @return s{Array} Object method's parameter names.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj(text) { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
+ * reflectionObj.getConstructorParameters();	// ['text']
  */
 Obj.prototype.getMethodParameters = function (method) {
 
@@ -100,7 +170,16 @@ Obj.prototype.getMethodParameters = function (method) {
 /**
  * Get all the methods.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @returns {Array} Object method's names.
+ * @return s{Array} Object method's names.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
+ * reflectionObj.getMethods();		//['sayHello']
+ * reflectionObj.getMethods(false);	//[]
  */
 Obj.prototype.getMethods = function (includeProtoypye) {
 
@@ -118,7 +197,15 @@ Obj.prototype.getMethods = function (includeProtoypye) {
  * Get a specific method.
  * @param  {string} method Method name.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @returns {Function} The method.
+ * @return s{Function} The method.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
+ * reflectionObj.getMethod('sayHello');	//[function]
  */
 Obj.prototype.getMethod = function (method, includeProtoypye) {
 
@@ -132,7 +219,16 @@ Obj.prototype.getMethod = function (method, includeProtoypye) {
 /**
  * Get all the properties.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @returns {Array} Object properties's names.
+ * @return s{Array} Object properties's names.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
+ * reflectionObj.getProperties();		//['hello']
+ * reflectionObj.getProperties(false);	//[]
  */
 Obj.prototype.getProperties = function (includeProtoypye) {
 
@@ -150,7 +246,15 @@ Obj.prototype.getProperties = function (includeProtoypye) {
  * Get a specific property.
  * @param  {string} property Property's name.
  * @param  {Boolean} includeProtoypye True to look up the prototype chain as well, false to only look at direct object.
- * @returns {Any} The property.
+ * @return s{Any} The property.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testObj() { };
+ * testObj.prototype = { hello: 'test', sayHello: function() {} };
+ * 
+ * const reflectionObj = new reflection.Obj(testObj);
+ * reflectionObj.getProperty('hello');	//'test'
  */
 Obj.prototype.getProperty = function (property, includeProtoypye) {
 
@@ -190,6 +294,12 @@ ObjPropertyNotExistError.prototype.constructor = ObjPropertyNotExistError;
  * Create a new meta-funct to inspect another object.
  * @param  {Function} func Function to inspect.
  * @static
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testFunc() { };
+ * 
+ * const reflectionFunc = new reflection.Func(testFunc);
  */
 function Func(func) {
 
@@ -201,7 +311,14 @@ function Func(func) {
 }
 /**
  * Get the name.
- * @returns {string} Functions's name.
+ * @return s{string} Functions's name.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testFunc() { };
+ * 
+ * const reflectionFunc = new reflection.Func(testFunc);
+ * reflectionFunc.getName();	//'testFunc'
  */
 Func.prototype.getName = function () {
 
@@ -209,7 +326,14 @@ Func.prototype.getName = function () {
 };
 /**
  * Get the parameters.
- * @returns {Array} Functions's parameter names.
+ * @return s{Array} Functions's parameter names.
+ * @example
+ * const reflection = require('js-reflection');
+ * 
+ * function testFunc(text) { };
+ * 
+ * const reflectionFunc = new reflection.Func(testFunc);
+ * reflectionFunc.getParameters();	//['text']
  */
 Func.prototype.getParameters = function () {
 
@@ -231,7 +355,8 @@ FuncNotFunctionError.prototype.constructor = FuncNotFunctionError;
 /**
  * Get the parameters.
  * @param  {String} functionSource Function source code.
- * @returns {Array} Functions's parameter names.
+ * @return s{Array} Functions's parameter names.
+ * @ignore
  */
 function getFunctionParameters(functionSource) {
 
@@ -243,8 +368,7 @@ function getFunctionParameters(functionSource) {
 
 	const match = functionSource.match(functionRegex) || functionSource.match(lambdaRegex);
 	return match[1].length > 0 ?
-		match[1].replace(commentsRegex, '').replace(whitespaceRegex, '').split(parameterDelimiter) :
-		[];
+		match[1].replace(commentsRegex, '').replace(whitespaceRegex, '').split(parameterDelimiter) : [];
 }
 
 module.exports = {

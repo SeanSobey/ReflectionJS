@@ -11,7 +11,7 @@ npm install js-reflection
 ## Usage
 
 ```JavaScript
-const reflection = require('../src/index.js');
+const reflection = require('js-reflection');
 
 function MyObject(param) {
 
@@ -57,28 +57,28 @@ console.log('getParameters', new reflection.Func(myFunction).getParameters());
 ```
 
 ## Documentation
+<a name="module_reflection"></a>
 
-<a name="module_js-reflection"></a>
+## reflection
+Javascript reflection is a library to examine, introspect, and modify javascript code structure and behavior at runtime.
+
 
 * [reflection](#module_reflection)
-    * _static_
-        * [.typeOf(obj)](#module_reflection.typeOf) ⇒ <code>String</code>
-        * [.Obj(obj)](#module_reflection.Obj)
-            * [.hasProperty(property, includeProtoypye)](#module_reflection.Obj+hasProperty) ⇒ <code>Boolean</code>
-            * [.hasMethod(method, includeProtoypye)](#module_reflection.Obj+hasMethod) ⇒ <code>Boolean</code>
-            * [.getName()](#module_reflection.Obj+getName) ⇒ <code>string</code>
-            * [.getConstructor()](#module_reflection.Obj+getConstructor) ⇒ <code>function</code>
-            * [.getConstructorParameters()](#module_reflection.Obj+getConstructorParameters) ⇒ <code>Array</code>
-            * [.getMethodParameters(method)](#module_reflection.Obj+getMethodParameters) ⇒ <code>Array</code>
-            * [.getMethods(includeProtoypye)](#module_reflection.Obj+getMethods) ⇒ <code>Array</code>
-            * [.getMethod(method, includeProtoypye)](#module_reflection.Obj+getMethod) ⇒ <code>function</code>
-            * [.getProperties(includeProtoypye)](#module_reflection.Obj+getProperties) ⇒ <code>Array</code>
-            * [.getProperty(property, includeProtoypye)](#module_reflection.Obj+getProperty) ⇒ <code>Any</code>
-        * [.Func(func)](#module_reflection.Func)
-            * [.getName()](#module_reflection.Func+getName) ⇒ <code>string</code>
-            * [.getParameters()](#module_reflection.Func+getParameters) ⇒ <code>Array</code>
-    * _inner_
-        * [~getFunctionParameters(functionSource)](#module_reflection..getFunctionParameters) ⇒ <code>Array</code>
+    * [.typeOf(obj)](#module_reflection.typeOf) ⇒ <code>String</code>
+    * [.Obj(obj)](#module_reflection.Obj)
+        * [.hasProperty(property, includeProtoypye)](#module_reflection.Obj+hasProperty) ⇒ <code>Boolean</code>
+        * [.hasMethod(method, includeProtoypye)](#module_reflection.Obj+hasMethod) ⇒ <code>Boolean</code>
+        * [.getName()](#module_reflection.Obj+getName) ⇒ <code>string</code>
+        * [.getConstructor()](#module_reflection.Obj+getConstructor) ⇒ <code>function</code>
+        * [.getConstructorParameters()](#module_reflection.Obj+getConstructorParameters) ⇒ <code>Array</code>
+        * [.getMethodParameters(method)](#module_reflection.Obj+getMethodParameters) ⇒ <code>Array</code>
+        * [.getMethods(includeProtoypye)](#module_reflection.Obj+getMethods) ⇒ <code>Array</code>
+        * [.getMethod(method, includeProtoypye)](#module_reflection.Obj+getMethod) ⇒ <code>function</code>
+        * [.getProperties(includeProtoypye)](#module_reflection.Obj+getProperties) ⇒ <code>Array</code>
+        * [.getProperty(property, includeProtoypye)](#module_reflection.Obj+getProperty) ⇒ <code>Any</code>
+    * [.Func(func)](#module_reflection.Func)
+        * [.getName()](#module_reflection.Func+getName) ⇒ <code>string</code>
+        * [.getParameters()](#module_reflection.Func+getParameters) ⇒ <code>Array</code>
 
 <a name="module_reflection.typeOf"></a>
 
@@ -92,6 +92,21 @@ Get the type name of an object.
 | --- | --- | --- |
 | obj | <code>Object</code> | Object to get the type of. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+reflection.typeOf(null);				//'null'
+reflection.typeOf(undefined);		//'undefined'
+reflection.typeOf(/\s/g);			//'regexp'
+reflection.typeOf(true);				//'boolean'
+reflection.typeOf([]);				//'array'
+reflection.typeOf(1);				//'number'
+reflection.typeOf('hello');			//'string'
+reflection.typeOf(new Date());		//'date'
+reflection.typeOf(new Error());		//'error'
+reflection.typeOf(function() {});	//'function'
+```
 <a name="module_reflection.Obj"></a>
 
 ### reflection.Obj(obj)
@@ -103,6 +118,15 @@ Create a new meta-object to inspect another object.
 | --- | --- | --- |
 | obj | <code>Object</code> &#124; <code>function</code> | Object or function to inspect. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+```
 
 * [.Obj(obj)](#module_reflection.Obj)
     * [.hasProperty(property, includeProtoypye)](#module_reflection.Obj+hasProperty) ⇒ <code>Boolean</code>
@@ -127,8 +151,20 @@ Check for a given property.
 | Param | Type | Description |
 | --- | --- | --- |
 | property | <code>string</code> | Property name to check. |
-| includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
+| includeProtoypye | <code>Boolean</code> | True (default) to look up the prototype chain as well, false to only look at direct object. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.hasProperty('hello');			//true
+reflectionObj.hasProperty('hello', false);	//false
+reflectionObj.hasProperty('sayHello');		//false
+```
 <a name="module_reflection.Obj+hasMethod"></a>
 
 #### obj.hasMethod(method, includeProtoypye) ⇒ <code>Boolean</code>
@@ -142,6 +178,17 @@ Check for a given method.
 | method | <code>string</code> | Method name to check. |
 | includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.hasProperty('sayHello');	//true
+reflectionObj.hasProperty('hello');		//false
+```
 <a name="module_reflection.Obj+getName"></a>
 
 #### obj.getName() ⇒ <code>string</code>
@@ -149,6 +196,16 @@ Get the name.
 
 **Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
 **Returns**: <code>string</code> - Object's name.  
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.getName();	//'testObj'
+```
 <a name="module_reflection.Obj+getConstructor"></a>
 
 #### obj.getConstructor() ⇒ <code>function</code>
@@ -156,6 +213,15 @@ Get the constructor.
 
 **Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
 **Returns**: <code>function</code> - Object's constructor.  
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+```
 <a name="module_reflection.Obj+getConstructorParameters"></a>
 
 #### obj.getConstructorParameters() ⇒ <code>Array</code>
@@ -163,6 +229,16 @@ Get the constructors parameters.
 
 **Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
 **Returns**: <code>Array</code> - Object constructor's parameter names.  
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.getConstructor();	// [function]
+```
 <a name="module_reflection.Obj+getMethodParameters"></a>
 
 #### obj.getMethodParameters(method) ⇒ <code>Array</code>
@@ -175,6 +251,16 @@ Get a methods parameters.
 | --- | --- | --- |
 | method | <code>string</code> | Method name. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj(text) { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.getConstructorParameters();	// ['text']
+```
 <a name="module_reflection.Obj+getMethods"></a>
 
 #### obj.getMethods(includeProtoypye) ⇒ <code>Array</code>
@@ -187,6 +273,17 @@ Get all the methods.
 | --- | --- | --- |
 | includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.getMethods();		//['sayHello']
+reflectionObj.getMethods(false);	//[]
+```
 <a name="module_reflection.Obj+getMethod"></a>
 
 #### obj.getMethod(method, includeProtoypye) ⇒ <code>function</code>
@@ -200,6 +297,16 @@ Get a specific method.
 | method | <code>string</code> | Method name. |
 | includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.getMethod('sayHello');	//[function]
+```
 <a name="module_reflection.Obj+getProperties"></a>
 
 #### obj.getProperties(includeProtoypye) ⇒ <code>Array</code>
@@ -212,6 +319,17 @@ Get all the properties.
 | --- | --- | --- |
 | includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.getProperties();		//['hello']
+reflectionObj.getProperties(false);	//[]
+```
 <a name="module_reflection.Obj+getProperty"></a>
 
 #### obj.getProperty(property, includeProtoypye) ⇒ <code>Any</code>
@@ -225,6 +343,16 @@ Get a specific property.
 | property | <code>string</code> | Property's name. |
 | includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.getProperty('hello');	//'test'
+```
 <a name="module_reflection.Func"></a>
 
 ### reflection.Func(func)
@@ -236,6 +364,14 @@ Create a new meta-funct to inspect another object.
 | --- | --- | --- |
 | func | <code>function</code> | Function to inspect. |
 
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testFunc() { };
+
+const reflectionFunc = new reflection.Func(testFunc);
+```
 
 * [.Func(func)](#module_reflection.Func)
     * [.getName()](#module_reflection.Func+getName) ⇒ <code>string</code>
@@ -248,6 +384,15 @@ Get the name.
 
 **Kind**: instance method of <code>[Func](#module_reflection.Func)</code>  
 **Returns**: <code>string</code> - Functions's name.  
+**Example**  
+```js
+const reflection = require('js-reflection');
+
+function testFunc() { };
+
+const reflectionFunc = new reflection.Func(testFunc);
+reflectionFunc.getName();	//'testFunc'
+```
 <a name="module_reflection.Func+getParameters"></a>
 
 #### func.getParameters() ⇒ <code>Array</code>
@@ -255,20 +400,12 @@ Get the parameters.
 
 **Kind**: instance method of <code>[Func](#module_reflection.Func)</code>  
 **Returns**: <code>Array</code> - Functions's parameter names.  
-<a name="module_reflection..getFunctionParameters"></a>
+**Example**  
+```js
+const reflection = require('js-reflection');
 
-### reflection~getFunctionParameters(functionSource) ⇒ <code>Array</code>
-Get the parameters.
+function testFunc(text) { };
 
-**Kind**: inner method of <code>[reflection](#module_reflection)</code>  
-**Returns**: <code>Array</code> - Functions's parameter names.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| functionSource | <code>String</code> | Function source code. |
-
-## Run Tests
-
-```
-npm run test
+const reflectionFunc = new reflection.Func(testFunc);
+reflectionFunc.getParameters();	//['text']
 ```

@@ -1,6 +1,6 @@
 {
   "name": "js-reflection",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Javascript reflection is a library to examine, introspect, and modify javascript code structure and behavior at runtime.",
   "main": "index.js",
   "scripts": {
