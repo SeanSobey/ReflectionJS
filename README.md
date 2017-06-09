@@ -57,6 +57,12 @@ console.log('getParameters', new reflection.Func(myFunction).getParameters());
 ```
 
 ## Documentation
+<a name="module_reflection"></a>
+
+## reflection
+Javascript reflection is a library to examine, introspect, and modify javascript code structure and behavior at runtime.
+
+
 * [reflection](#module_reflection)
     * [.typeOf(obj)](#module_reflection.typeOf) ⇒ <code>String</code>
     * [.Obj(obj)](#module_reflection.Obj)
