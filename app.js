@@ -1,4 +1,5 @@
-const reflection = require('../src/index.js');
+'use-strict';
+const reflection = require('./index.js');
 
 function MyObject(param) {
 

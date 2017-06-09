@@ -1,11 +1,11 @@
 {
   "name": "js-reflection",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Javascript reflection is a library to examine, introspect, and modify javascript code structure and behavior at runtime.",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover -x src/app.js --include-all-sources node_modules/jasmine/bin/jasmine.js",
-    "docs": "jsdoc2md src/index.js > documentation.md"
+    "test": "istanbul cover -x app.js --include-all-sources node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
+    "docs": "jsdoc2md index.js > documentation.md"
   },
   "author": "R2dical",
   "license": "GPL-3.0",
