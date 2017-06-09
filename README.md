@@ -57,25 +57,21 @@ console.log('getParameters', new reflection.Func(myFunction).getParameters());
 ```
 
 ## Documentation
-<a name="module_reflection"></a>
-
-## reflection
-Javascript reflection is a library to examine, introspect, and modify javascript code structure and behavior at runtime.
-
-
 * [reflection](#module_reflection)
     * [.typeOf(obj)](#module_reflection.typeOf) ⇒ <code>String</code>
     * [.Obj(obj)](#module_reflection.Obj)
-        * [.hasProperty(property, includeProtoypye)](#module_reflection.Obj+hasProperty) ⇒ <code>Boolean</code>
-        * [.hasMethod(method, includeProtoypye)](#module_reflection.Obj+hasMethod) ⇒ <code>Boolean</code>
+        * [.hasProperty(property, includePrototype)](#module_reflection.Obj+hasProperty) ⇒ <code>Boolean</code>
+        * [.hasMethod(method, includePrototype)](#module_reflection.Obj+hasMethod) ⇒ <code>Boolean</code>
         * [.getName()](#module_reflection.Obj+getName) ⇒ <code>string</code>
         * [.getConstructor()](#module_reflection.Obj+getConstructor) ⇒ <code>function</code>
         * [.getConstructorParameters()](#module_reflection.Obj+getConstructorParameters) ⇒ <code>Array</code>
         * [.getMethodParameters(method)](#module_reflection.Obj+getMethodParameters) ⇒ <code>Array</code>
-        * [.getMethods(includeProtoypye)](#module_reflection.Obj+getMethods) ⇒ <code>Array</code>
-        * [.getMethod(method, includeProtoypye)](#module_reflection.Obj+getMethod) ⇒ <code>function</code>
-        * [.getProperties(includeProtoypye)](#module_reflection.Obj+getProperties) ⇒ <code>Array</code>
-        * [.getProperty(property, includeProtoypye)](#module_reflection.Obj+getProperty) ⇒ <code>Any</code>
+        * [.getMethods(includePrototype)](#module_reflection.Obj+getMethods) ⇒ <code>Array</code>
+        * [.getMethod(method, includePrototype)](#module_reflection.Obj+getMethod) ⇒ <code>function</code>
+        * [.getProperties(includePrototype)](#module_reflection.Obj+getProperties) ⇒ <code>Array</code>
+        * [.getProperty(property, includePrototype)](#module_reflection.Obj+getProperty) ⇒ <code>Any</code>
+        * [.getPropertiesAndMethods(includePrototype)](#module_reflection.Obj+getPropertiesAndMethods) ⇒ <code>Array</code>
+        * [.getPropertyOrMethod(propertyOrMethod, includePrototype)](#module_reflection.Obj+getPropertyOrMethod) ⇒ <code>Any</code>
     * [.Func(func)](#module_reflection.Func)
         * [.getName()](#module_reflection.Func+getName) ⇒ <code>string</code>
         * [.getParameters()](#module_reflection.Func+getParameters) ⇒ <code>Array</code>
@@ -129,20 +125,22 @@ const reflectionObj = new reflection.Obj(testObj);
 ```
 
 * [.Obj(obj)](#module_reflection.Obj)
-    * [.hasProperty(property, includeProtoypye)](#module_reflection.Obj+hasProperty) ⇒ <code>Boolean</code>
-    * [.hasMethod(method, includeProtoypye)](#module_reflection.Obj+hasMethod) ⇒ <code>Boolean</code>
+    * [.hasProperty(property, includePrototype)](#module_reflection.Obj+hasProperty) ⇒ <code>Boolean</code>
+    * [.hasMethod(method, includePrototype)](#module_reflection.Obj+hasMethod) ⇒ <code>Boolean</code>
     * [.getName()](#module_reflection.Obj+getName) ⇒ <code>string</code>
     * [.getConstructor()](#module_reflection.Obj+getConstructor) ⇒ <code>function</code>
     * [.getConstructorParameters()](#module_reflection.Obj+getConstructorParameters) ⇒ <code>Array</code>
     * [.getMethodParameters(method)](#module_reflection.Obj+getMethodParameters) ⇒ <code>Array</code>
-    * [.getMethods(includeProtoypye)](#module_reflection.Obj+getMethods) ⇒ <code>Array</code>
-    * [.getMethod(method, includeProtoypye)](#module_reflection.Obj+getMethod) ⇒ <code>function</code>
-    * [.getProperties(includeProtoypye)](#module_reflection.Obj+getProperties) ⇒ <code>Array</code>
-    * [.getProperty(property, includeProtoypye)](#module_reflection.Obj+getProperty) ⇒ <code>Any</code>
+    * [.getMethods(includePrototype)](#module_reflection.Obj+getMethods) ⇒ <code>Array</code>
+    * [.getMethod(method, includePrototype)](#module_reflection.Obj+getMethod) ⇒ <code>function</code>
+    * [.getProperties(includePrototype)](#module_reflection.Obj+getProperties) ⇒ <code>Array</code>
+    * [.getProperty(property, includePrototype)](#module_reflection.Obj+getProperty) ⇒ <code>Any</code>
+    * [.getPropertiesAndMethods(includePrototype)](#module_reflection.Obj+getPropertiesAndMethods) ⇒ <code>Array</code>
+    * [.getPropertyOrMethod(propertyOrMethod, includePrototype)](#module_reflection.Obj+getPropertyOrMethod) ⇒ <code>Any</code>
 
 <a name="module_reflection.Obj+hasProperty"></a>
 
-#### obj.hasProperty(property, includeProtoypye) ⇒ <code>Boolean</code>
+#### obj.hasProperty(property, includePrototype) ⇒ <code>Boolean</code>
 Check for a given property.
 
 **Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
@@ -151,7 +149,7 @@ Check for a given property.
 | Param | Type | Description |
 | --- | --- | --- |
 | property | <code>string</code> | Property name to check. |
-| includeProtoypye | <code>Boolean</code> | True (default) to look up the prototype chain as well, false to only look at direct object. |
+| includePrototype | <code>Boolean</code> | True (default) to look up the prototype chain as well, false to only look at direct object. |
 
 **Example**  
 ```js
@@ -167,7 +165,7 @@ reflectionObj.hasProperty('sayHello');		//false
 ```
 <a name="module_reflection.Obj+hasMethod"></a>
 
-#### obj.hasMethod(method, includeProtoypye) ⇒ <code>Boolean</code>
+#### obj.hasMethod(method, includePrototype) ⇒ <code>Boolean</code>
 Check for a given method.
 
 **Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
@@ -176,7 +174,7 @@ Check for a given method.
 | Param | Type | Description |
 | --- | --- | --- |
 | method | <code>string</code> | Method name to check. |
-| includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
+| includePrototype | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
 **Example**  
 ```js
@@ -251,7 +249,7 @@ Get a methods parameters.
 | --- | --- | --- |
 | method | <code>string</code> | Method name. |
 
-**Example**  
+**Example**
 ```js
 const reflection = require('js-reflection');
 
@@ -263,7 +261,7 @@ reflectionObj.getConstructorParameters();	// ['text']
 ```
 <a name="module_reflection.Obj+getMethods"></a>
 
-#### obj.getMethods(includeProtoypye) ⇒ <code>Array</code>
+#### obj.getMethods(includePrototype) ⇒ <code>Array</code>
 Get all the methods.
 
 **Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
@@ -271,9 +269,9 @@ Get all the methods.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
+| includePrototype | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
-**Example**  
+**Example**
 ```js
 const reflection = require('js-reflection');
 
@@ -286,7 +284,7 @@ reflectionObj.getMethods(false);	//[]
 ```
 <a name="module_reflection.Obj+getMethod"></a>
 
-#### obj.getMethod(method, includeProtoypye) ⇒ <code>function</code>
+#### obj.getMethod(method, includePrototype) ⇒ <code>function</code>
 Get a specific method.
 
 **Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
@@ -295,9 +293,9 @@ Get a specific method.
 | Param | Type | Description |
 | --- | --- | --- |
 | method | <code>string</code> | Method name. |
-| includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
+| includePrototype | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
-**Example**  
+**Example**
 ```js
 const reflection = require('js-reflection');
 
@@ -309,7 +307,7 @@ reflectionObj.getMethod('sayHello');	//[function]
 ```
 <a name="module_reflection.Obj+getProperties"></a>
 
-#### obj.getProperties(includeProtoypye) ⇒ <code>Array</code>
+#### obj.getProperties(includePrototype) ⇒ <code>Array</code>
 Get all the properties.
 
 **Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
@@ -317,9 +315,9 @@ Get all the properties.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
+| includePrototype | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
-**Example**  
+**Example**
 ```js
 const reflection = require('js-reflection');
 
@@ -332,7 +330,7 @@ reflectionObj.getProperties(false);	//[]
 ```
 <a name="module_reflection.Obj+getProperty"></a>
 
-#### obj.getProperty(property, includeProtoypye) ⇒ <code>Any</code>
+#### obj.getProperty(property, includePrototype) ⇒ <code>Any</code>
 Get a specific property.
 
 **Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
@@ -341,9 +339,9 @@ Get a specific property.
 | Param | Type | Description |
 | --- | --- | --- |
 | property | <code>string</code> | Property's name. |
-| includeProtoypye | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
+| includePrototype | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
 
-**Example**  
+**Example**
 ```js
 const reflection = require('js-reflection');
 
@@ -352,6 +350,53 @@ testObj.prototype = { hello: 'test', sayHello: function() {} };
 
 const reflectionObj = new reflection.Obj(testObj);
 reflectionObj.getProperty('hello');	//'test'
+```
+<a name="module_reflection.Obj+getPropertiesAndMethods"></a>
+
+#### obj.getPropertiesAndMethods(includePrototype) ⇒ <code>Array</code>
+Get all the properties and methods.
+
+**Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
+**Returns**: <code>Array</code> - Object properties's and methods names.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| includePrototype | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
+
+**Example**
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.getPropertiesAndMethods();		//['hello', 'sayHello']
+reflectionObj.getPropertiesAndMethods(false);	//[]
+```
+<a name="module_reflection.Obj+getPropertyOrMethod"></a>
+
+#### obj.getPropertyOrMethod(propertyOrMethod, includePrototype) ⇒ <code>Any</code>
+Get a specific property or method.
+
+**Kind**: instance method of <code>[Obj](#module_reflection.Obj)</code>  
+**Returns**: <code>Any</code> - The property or method.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| propertyOrMethod | <code>string</code> | Property or method's name. |
+| includePrototype | <code>Boolean</code> | True to look up the prototype chain as well, false to only look at direct object. |
+
+**Example**
+```js
+const reflection = require('js-reflection');
+
+function testObj() { };
+testObj.prototype = { hello: 'test', sayHello: function() {} };
+
+const reflectionObj = new reflection.Obj(testObj);
+reflectionObj.getPropertyOrMethod('hello');	//'test'
+reflectionObj.getPropertyOrMethod('sayHello');	//'[function]'
 ```
 <a name="module_reflection.Func"></a>
 
@@ -364,7 +409,7 @@ Create a new meta-funct to inspect another object.
 | --- | --- | --- |
 | func | <code>function</code> | Function to inspect. |
 
-**Example**  
+**Example**
 ```js
 const reflection = require('js-reflection');
 
