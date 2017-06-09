@@ -18,6 +18,10 @@
         {
             "taskName": "test",
             "args": ["run", "test"]
+        },
+        {
+            "taskName": "docs",
+            "args": ["run", "docs"]
         }
     ]
 }
